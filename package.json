@@ -52,7 +52,7 @@
     "eslint": "^7.6.0",
     "eslint-plugin-eslint-comments": "^3.0.0",
     "eslint-plugin-import": "^2.22.0",
-    "eslint-plugin-jest": "^22.0.0",
+    "eslint-plugin-jest": "^23.0.0",
     "graphql": "^15.3.0",
     "graphql-tag": "^2.11.0",
     "jest": "^26.2.2",
