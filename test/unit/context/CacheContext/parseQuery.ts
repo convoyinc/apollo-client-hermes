@@ -12,7 +12,7 @@ describe(`context.CacheContext`, () => {
       const parsed1 = context.parseOperation({ rootId: 'root', document: simpleQuery });
       const parsed2 = context.parseOperation({ rootId: 'root', document: simpleQuery });
 
-      expect(parsed1).to.eq(parsed2);
+      jestExpect(parsed1).toBe(parsed2);
     });
 
     it(`memoizes identical queries w/ the same variables`, () => {
@@ -20,7 +20,7 @@ describe(`context.CacheContext`, () => {
       const parsed1 = context.parseOperation({ rootId: 'root', document: simpleQuery, variables: { a: 1 } });
       const parsed2 = context.parseOperation({ rootId: 'root', document: simpleQuery, variables: { a: 1 } });
 
-      expect(parsed1).to.eq(parsed2);
+      jestExpect(parsed1).toBe(parsed2);
     });
 
     it(`considers the rootId part of a query's identity`, () => {
@@ -28,7 +28,7 @@ describe(`context.CacheContext`, () => {
       const parsed1 = context.parseOperation({ rootId: 'root1', document: simpleQuery, variables: { a: 1 } });
       const parsed2 = context.parseOperation({ rootId: 'root2', document: simpleQuery, variables: { a: 1 } });
 
-      expect(parsed1).to.not.eq(parsed2);
+      jestExpect(parsed1).not.toBe(parsed2);
     });
 
     it(`considers variables part of a query's identity`, () => {
@@ -36,7 +36,7 @@ describe(`context.CacheContext`, () => {
       const parsed1 = context.parseOperation({ rootId: 'root', document: simpleQuery, variables: { a: 1 } });
       const parsed2 = context.parseOperation({ rootId: 'root', document: simpleQuery, variables: { a: 2 } });
 
-      expect(parsed1).to.not.eq(parsed2);
+      jestExpect(parsed1).not.toBe(parsed2);
     });
 
     it(`doesn't get tripped up by undefined variables`, () => {
@@ -44,7 +44,7 @@ describe(`context.CacheContext`, () => {
       const parsed1 = context.parseOperation({ rootId: 'root', document: simpleQuery, variables: { a: 1 } });
       const parsed2 = context.parseOperation({ rootId: 'root', document: simpleQuery });
 
-      expect(parsed1).to.not.eq(parsed2);
+      jestExpect(parsed1).not.toBe(parsed2);
     });
 
   });

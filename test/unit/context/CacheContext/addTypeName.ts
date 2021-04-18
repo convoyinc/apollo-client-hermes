@@ -33,13 +33,13 @@ describe(`context.CacheContext`, () => {
       expect(context.addTypename).to.eq(false);
 
       const rootSelection = parsed.info.operation.selectionSet;
-      expect(fieldNames(rootSelection)).to.have.members(['foo']);
+      jestExpect(fieldNames(rootSelection)).toEqual(jestExpect.arrayContaining(['foo']));
 
       const fooSelection = (rootSelection.selections[0] as any).selectionSet;
-      expect(fieldNames(fooSelection)).to.have.members(['bar']);
+      jestExpect(fieldNames(fooSelection)).toEqual(jestExpect.arrayContaining(['bar']));
 
       const barSelection = fooSelection.selections.find((s: any) => s.name.value === 'bar').selectionSet;
-      expect(fieldNames(barSelection)).to.have.members(['a', 'b']);
+      jestExpect(fieldNames(barSelection)).toEqual(jestExpect.arrayContaining(['a', 'b']));
     });
 
     it(`injects __typename into parsed queries`, () => {
@@ -53,13 +53,13 @@ describe(`context.CacheContext`, () => {
       expect(context.addTypename).to.eq(true);
 
       const rootSelection = parsed.info.operation.selectionSet;
-      expect(fieldNames(rootSelection)).to.have.members(['foo']);
+      jestExpect(fieldNames(rootSelection)).toEqual(jestExpect.arrayContaining(['foo']));
 
       const fooSelection = (rootSelection.selections[0] as any).selectionSet;
-      expect(fieldNames(fooSelection)).to.have.members(['__typename', 'bar']);
+      jestExpect(fieldNames(fooSelection)).toEqual(jestExpect.arrayContaining(['__typename', 'bar']));
 
       const barSelection = fooSelection.selections.find((s: any) => s.name.value === 'bar').selectionSet;
-      expect(fieldNames(barSelection)).to.have.members(['__typename', 'a', 'b']);
+      jestExpect(fieldNames(barSelection)).toEqual(jestExpect.arrayContaining(['__typename', 'a', 'b']));
     });
 
     it(`injects __typename into fragments`, () => {
@@ -76,13 +76,13 @@ describe(`context.CacheContext`, () => {
       `);
 
       const rootSelection = parsed.info.operation.selectionSet;
-      expect(fieldNames(rootSelection)).to.have.members(['foo']);
+      jestExpect(fieldNames(rootSelection)).toEqual(jestExpect.arrayContaining(['foo']));
 
       const fooSelection = (rootSelection.selections[0] as any).selectionSet;
-      expect(fieldNames(fooSelection)).to.have.members(['__typename']);
+      jestExpect(fieldNames(fooSelection)).toEqual(jestExpect.arrayContaining(['__typename']));
 
       const fullFooSelection = parsed.info.fragmentMap['fullFoo'].selectionSet;
-      expect(fieldNames(fullFooSelection)).to.have.members(['__typename', 'bar']);
+      jestExpect(fieldNames(fullFooSelection)).toEqual(jestExpect.arrayContaining(['__typename', 'bar']));
     });
 
     it(`injects __typename into inline fragments`, () => {
@@ -95,16 +95,16 @@ describe(`context.CacheContext`, () => {
       }`);
 
       const rootSelection = parsed.info.operation.selectionSet;
-      expect(fieldNames(rootSelection)).to.have.members(['asdf']);
+      jestExpect(fieldNames(rootSelection)).toEqual(jestExpect.arrayContaining(['asdf']));
 
       const asdfSelection = (rootSelection.selections[0] as any).selectionSet;
-      expect(fieldNames(asdfSelection)).to.have.members(['__typename']);
+      jestExpect(fieldNames(asdfSelection)).toEqual(jestExpect.arrayContaining(['__typename']));
 
       const fooSelection = asdfSelection.selections[0].selectionSet;
-      expect(fieldNames(fooSelection)).to.have.members(['__typename', 'a']);
+      jestExpect(fieldNames(fooSelection)).toEqual(jestExpect.arrayContaining(['__typename', 'a']));
 
       const barSelection = asdfSelection.selections[1].selectionSet;
-      expect(fieldNames(barSelection)).to.have.members(['__typename', 'b']);
+      jestExpect(fieldNames(barSelection)).toEqual(jestExpect.arrayContaining(['__typename', 'b']));
     });
   });
 });

@@ -22,7 +22,7 @@ describe(`parseQuery with queries with directives`, () => {
         baz(bat: "bad") @complex(arg0: $varB, arg1: $varC)
       }
     }`;
-    expect(parseOperation(operation).variables).to.deep.eq(
+    jestExpect(parseOperation(operation).variables).toEqual(
       new Set(['varA', 'varB', 'varC'])
     );
   });
@@ -45,7 +45,7 @@ describe(`parseQuery with queries with directives`, () => {
         name @complex(arg0: $varB, arg1: $varC)
       }
     `;
-    expect(parseOperation(operation).variables).to.deep.eq(
+    jestExpect(parseOperation(operation).variables).toEqual(
       new Set(['varA', 'varB', 'varC', 'varD'])
     );
   });

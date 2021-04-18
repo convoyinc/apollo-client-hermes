@@ -46,14 +46,14 @@ describe(`operations.read`, () => {
 
     it(`follows resolver redirects on the query root`, () => {
       const { result, complete } = read(context, { ...rootRedirectQuery, variables: { id: 1 } }, baseSnapshot);
-      expect((result as any).thing).to.deep.eq({ __typename: 'Thing', id: 1, name: 'One' });
-      expect(complete).to.eq(true);
+      jestExpect((result as any).thing).toEqual({ __typename: 'Thing', id: 1, name: 'One' });
+      jestExpect(complete).toBe(true);
     });
 
     it(`follows resolver redirects on the query root`, () => {
       const { result, complete } = read(context, { ...nestedRedirectQuery, variables: { id: 1 } }, baseSnapshot);
-      expect((result as any).nested.thing).to.deep.eq({ __typename: 'Thing', id: 1, name: 'One' });
-      expect(complete).to.eq(true);
+      jestExpect((result as any).nested.thing).toEqual({ __typename: 'Thing', id: 1, name: 'One' });
+      jestExpect(complete).toBe(true);
     });
 
     it(`prefers explicitly queried values, when present`, () => {
@@ -62,14 +62,14 @@ describe(`operations.read`, () => {
       });
 
       const { result, complete } = read(context, { ...rootRedirectQuery, variables: { id: 1 } }, snapshot);
-      expect((result as any).thing).to.deep.eq({ __typename: 'Thing', id: 111, name: 'Other One' });
-      expect(complete).to.eq(true);
+      jestExpect((result as any).thing).toEqual({ __typename: 'Thing', id: 111, name: 'Other One' });
+      jestExpect(complete).toBe(true);
     });
 
     it(`supports redirects to nowhere`, () => {
       const { result, complete } = read(context, { ...rootRedirectQuery, variables: { id: 123 } }, baseSnapshot);
-      expect((result as any).thing).to.deep.eq(undefined);
-      expect(complete).to.eq(false);
+      jestExpect((result as any).thing).toEqual(undefined);
+      jestExpect(complete).toBe(false);
     });
 
   });

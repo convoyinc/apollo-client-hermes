@@ -38,24 +38,24 @@ describe(`context.QueryInfo`, () => {
     });
 
     it(`hangs onto the document, with no changes`, () => {
-      expect(info.document).to.eq(query);
+      jestExpect(info.document).toBe(query);
     });
 
     it(`extracts the operation`, () => {
-      expect(info.operation.name!.value).to.eq('getThings');
-      expect(info.operation.operation).to.eq('query');
+      jestExpect(info.operation.name!.value).toBe('getThings');
+      jestExpect(info.operation.operation).toBe('query');
     });
 
     it(`extracts the operation name`, () => {
-      expect(info.operationName).to.eq('getThings');
+      jestExpect(info.operationName).toBe('getThings');
     });
 
     it(`builds a fragment map`, () => {
-      expect(info.fragmentMap).to.have.all.keys('completeStuff', 'completeThing');
+      jestExpect(Object.keys(info.fragmentMap)).toEqual(jestExpect.arrayContaining(['completeStuff', 'completeThing']));
     });
 
     it(`collects the variables that are used`, () => {
-      expect(info.variables).to.deep.eq(new Set(['ids']));
+      jestExpect(info.variables).toEqual(new Set(['ids']));
     });
 
   });
@@ -74,19 +74,19 @@ describe(`context.QueryInfo`, () => {
     });
 
     it(`collects the variables that are used`, () => {
-      expect(info.variables).to.deep.eq(new Set(['ids', 'name', 'stinky']));
+      jestExpect(info.variables).toEqual(new Set(['ids', 'name', 'stinky']));
     });
 
     it(`collects default values for operation parameters`, () => {
-      expect(info.variableDefaults['name']).to.eq('Munster');
+      jestExpect(info.variableDefaults['name']).toBe('Munster');
     });
 
     it(`includes optional arguments as having a default value of null`, () => {
-      expect(info.variableDefaults['stinky']).to.eq(null);
+      jestExpect(info.variableDefaults['stinky']).toBe(null);
     });
 
     it(`excludes required parameters from the defaults`, () => {
-      expect(info.variableDefaults).to.not.have.key('ids');
+      jestExpect(Object.keys(info.variableDefaults)).not.toEqual(jestExpect.arrayContaining(['ids']));
     });
 
   });
@@ -94,17 +94,17 @@ describe(`context.QueryInfo`, () => {
   describe(`validation`, () => {
 
     it(`asserts that all variables are declared`, () => {
-      expect(() => {
+      jestExpect(() => {
         new QueryInfo(context, buildRawOperationFromQuery(gql`
           query whoops($foo: Number) {
             thing(foo: $foo, bar: $bar, baz: $baz)
           }
         `));
-      }).to.throw(/\$bar(.|\n)*\$baz/);
+      }).toThrow(/\$bar(.|\n)*\$baz/);
     });
 
     it(`asserts that all variables are declared, when used via fragments`, () => {
-      expect(() => {
+      jestExpect(() => {
         new QueryInfo(context, buildRawOperationFromQuery(gql`
           query whoops($foo: Number) {
             thing { ...stuff }
@@ -114,21 +114,21 @@ describe(`context.QueryInfo`, () => {
             stuff(foo: $foo, bar: $bar, baz: $baz)
           }
         `));
-      }).to.throw(/\$bar(.|\n)*\$baz/);
+      }).toThrow(/\$bar(.|\n)*\$baz/);
     });
 
     it(`asserts that all variables are used`, () => {
-      expect(() => {
+      jestExpect(() => {
         new QueryInfo(context, buildRawOperationFromQuery(gql`
           query whoops($foo: Number, $bar: String, $baz: ID) {
             thing(bar: $bar)
           }
         `));
-      }).to.throw(/\$foo(.|\n)*\$baz/);
+      }).toThrow(/\$foo(.|\n)*\$baz/);
     });
 
     it(`asserts that all variables are used, including fragments`, () => {
-      expect(() => {
+      jestExpect(() => {
         new QueryInfo(context, buildRawOperationFromQuery(gql`
           query whoops($foo: Number, $bar: String, $baz: ID) {
             thing { ...stuff }
@@ -138,7 +138,7 @@ describe(`context.QueryInfo`, () => {
             thing(bar: $bar)
           }
         `));
-      }).to.throw(/\$foo(.|\n)*\$baz/);
+      }).toThrow(/\$foo(.|\n)*\$baz/);
     });
 
   });

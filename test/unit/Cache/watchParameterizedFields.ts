@@ -88,10 +88,10 @@ describe(`Cache#watch`, () => {
     const updates: CacheInterface.DiffResult<any>[] = [];
     cache.watch({ ...simpleGraph, variables: { id: 1 } }, newResult => updates.push(newResult));
 
-    expect(updates.length).to.eq(1);
+    jestExpect(updates.length).toBe(1);
     const [update] = updates;
-    expect(update.result).to.deep.eq(baseState);
-    expect(update.complete).to.eq(true);
+    jestExpect(update.result).toEqual(baseState);
+    jestExpect(update.complete).toBe(true);
   });
 
   it(`triggers a callback after writing the same query with new values`, () => {
@@ -99,11 +99,11 @@ describe(`Cache#watch`, () => {
     cache.watch({ ...simpleGraph, variables: { id: 1 } }, newResult => updates.push(newResult));
     cache.write({ ...simpleGraph, variables: { id: 1 } }, { foo: { id: 1, bar: { id: 3, name: 'bar' } } });
 
-    expect(updates.length).to.eq(2);
+    jestExpect(updates.length).toBe(2);
 
     const [, update] = updates;
-    expect((update.result as any).foo.bar.id).to.eq(3);
-    expect(update.complete).to.eq(true);
+    jestExpect((update.result as any).foo.bar.id).toBe(3);
+    jestExpect(update.complete).toBe(true);
   });
 
   it(`doesn't trigger a callback if unrelated entities change`, () => {
@@ -111,7 +111,7 @@ describe(`Cache#watch`, () => {
     cache.watch({ ...simpleGraph, variables: { id: 1 } }, newResult => updates.push(newResult));
     cache.write({ ...partialOverlap, variables: { id: 1 } }, { foo: { id: 1, baz: { id: 3, name: 'baz2' } } });
 
-    expect(updates.length).to.eq(1);
+    jestExpect(updates.length).toBe(1);
   });
 
   it(`triggers an update on indirect edits to an entity`, () => {
@@ -119,10 +119,10 @@ describe(`Cache#watch`, () => {
     cache.watch({ ...simpleGraph, variables: { id: 1 } }, newResult => updates.push(newResult));
     cache.write(indirectEdit, { thing: { id: 2, name: 'bar2' } });
 
-    expect(updates.length).to.eq(2);
+    jestExpect(updates.length).toBe(2);
     const [, update] = updates;
-    expect((update.result as any).foo.bar.name).to.eq('bar2');
-    expect(update.complete).to.eq(true);
+    jestExpect((update.result as any).foo.bar.name).toBe('bar2');
+    jestExpect(update.complete).toBe(true);
   });
 
   it(`triggers an update on reference updates from the query root`, () => {
@@ -130,10 +130,10 @@ describe(`Cache#watch`, () => {
     cache.watch({ ...simpleGraph, variables: { id: 1 } }, newResult => updates.push(newResult));
     cache.write({ ...simpleGraph, variables: { id: 1 } }, { foo: { id: 100, bar: { id: 2, name: 'bar' } } });
 
-    expect(updates.length).to.eq(2);
+    jestExpect(updates.length).toBe(2);
     const [, update] = updates;
-    expect((update.result as any).foo.id).to.eq(100);
-    expect(update.complete).to.eq(true);
+    jestExpect((update.result as any).foo.id).toBe(100);
+    jestExpect(update.complete).toBe(true);
   });
 
   it(`ignores updates to nodes with different parameters`, () => {
@@ -141,7 +141,7 @@ describe(`Cache#watch`, () => {
     cache.watch({ ...simpleGraph, variables: { id: 1 } }, newResult => updates.push(newResult));
     cache.write({ ...simpleGraph, variables: { id: 100 } }, { foo: { id: 100, bar: { id: 2, name: 'bar' } } });
 
-    expect(updates.length).to.eq(1);
+    jestExpect(updates.length).toBe(1);
   });
 
   it(`ignores updates to parameterized subfields with different parameters`, () => {
@@ -152,7 +152,7 @@ describe(`Cache#watch`, () => {
       { foo: { id: 1, bar: { id: 200, name: 'hurk' } } },
     );
 
-    expect(updates.length).to.eq(1);
+    jestExpect(updates.length).toBe(1);
   });
 
   it(`handles cases where we transition from complete to incomplete`, () => {
@@ -160,11 +160,11 @@ describe(`Cache#watch`, () => {
     cache.watch({ ...simpleGraph, variables: { id: 1 } }, newResult => updates.push(newResult));
     cache.write({ ...partialOverlap, variables: { id: 1 } }, { foo: { id: 100, baz: { id: 3, name: 'baz' } } });
 
-    expect(updates.length).to.eq(2);
+    jestExpect(updates.length).toBe(2);
     const [, update] = updates;
-    expect((update.result as any).foo.id).to.eq(100);
-    expect((update.result as any).foo.bar).to.eq(undefined);
-    expect(update.complete).to.eq(false);
+    jestExpect((update.result as any).foo.id).toBe(100);
+    jestExpect((update.result as any).foo.bar).toBe(undefined);
+    jestExpect(update.complete).toBe(false);
   });
 
 });

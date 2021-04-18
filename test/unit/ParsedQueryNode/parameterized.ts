@@ -15,7 +15,7 @@ describe(`parseQuery with parameterized queries`, () => {
   }
 
   it(`parses single-field queries`, () => {
-    expect(parseOperation(`{ foo(arg: 1) }`)).to.deep.eq({
+    jestExpect(parseOperation(`{ foo(arg: 1) }`)).toEqual({
       parsedQuery: {
         foo: new ParsedQueryNode(undefined, undefined, { arg: 1 }),
       },
@@ -29,7 +29,7 @@ describe(`parseQuery with parameterized queries`, () => {
         foo(limit: $count)
       }
     `;
-    expect(parseOperation(operation)).to.deep.eq({
+    jestExpect(parseOperation(operation)).toEqual({
       parsedQuery: {
         foo: new ParsedQueryNode(undefined, undefined, { limit: new VariableArgument('count') }),
       },
@@ -47,7 +47,7 @@ describe(`parseQuery with parameterized queries`, () => {
         }
       }
     `;
-    expect(parseOperation(operation)).to.deep.eq({
+    jestExpect(parseOperation(operation)).toEqual({
       parsedQuery: {
         foo: new ParsedQueryNode({
           bar: new ParsedQueryNode({
@@ -69,7 +69,7 @@ describe(`parseQuery with parameterized queries`, () => {
         }
       }
     `;
-    expect(parseOperation(operation)).to.deep.eq({
+    jestExpect(parseOperation(operation)).toEqual({
       parsedQuery: {
         foo: new ParsedQueryNode({
           bar: new ParsedQueryNode<JsonScalar | VariableArgument>({

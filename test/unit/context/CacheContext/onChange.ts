@@ -62,13 +62,13 @@ describe(`context.CacheContext`, () => {
         ),
       };
 
-      expect(mockOnChange.mock.calls.length).to.equal(1);
-      expect(mockOnChange.mock.calls[0][0]).to.deep.equal({
+      jestExpect(mockOnChange.mock.calls.length).toBe(1);
+      jestExpect(mockOnChange.mock.calls[0][0]).toEqual({
         baseline: new GraphSnapshot(_values),
         optimistic: new GraphSnapshot(_values),
         optimisticQueue: new OptimisticUpdateQueue(),
       });
-      expect(mockOnChange.mock.calls[0][1]).to.deep.equal(new Set([QueryRootId, '0', '1']));
+      jestExpect(mockOnChange.mock.calls[0][1]).toEqual(new Set([QueryRootId, '0', '1']));
       mockOnChange.mockClear();
     });
 
@@ -114,19 +114,19 @@ describe(`context.CacheContext`, () => {
         ),
       };
 
-      expect(mockOnChange.mock.calls.length).to.equal(1);
-      expect(mockOnChange.mock.calls[0][0]).to.deep.equal({
+      jestExpect(mockOnChange.mock.calls.length).toBe(1);
+      jestExpect(mockOnChange.mock.calls[0][0]).toEqual({
         baseline: new GraphSnapshot(_values),
         optimistic: new GraphSnapshot(_values),
         optimisticQueue: new OptimisticUpdateQueue(),
       });
-      expect(mockOnChange.mock.calls[0][1]).to.deep.equal(new Set(['1']));
+      jestExpect(mockOnChange.mock.calls[0][1]).toEqual(new Set(['1']));
       mockOnChange.mockClear();
     });
 
     it(`do not trigger onChange callback on read`, () => {
       cache.read(graphqlQuery);
-      expect(mockOnChange.mock.calls.length).to.equal(0);
+      jestExpect(mockOnChange.mock.calls.length).toBe(0);
     });
 
   });

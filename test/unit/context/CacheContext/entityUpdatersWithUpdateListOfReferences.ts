@@ -136,9 +136,9 @@ describe(`context.CacheContext`, () => {
         }
       );
 
-      expect(userUpdater.mock.calls.length).to.eq(1);
+      jestExpect(userUpdater.mock.calls.length).toBe(1);
       const [, user, previous] = userUpdater.mock.calls[0];
-      expect(user).to.deep.eq({
+      jestExpect(user).toEqual({
         __typename: 'User',
         id: 3,
         name: 'Cheddar',
@@ -148,7 +148,7 @@ describe(`context.CacheContext`, () => {
           name: 'Main Dashboard',
         },
       });
-      expect(previous).to.deep.eq(undefined);
+      jestExpect(previous).toEqual(undefined);
     });
 
     it(`triggers updaters when an entity is orphaned`, () => {
@@ -171,10 +171,10 @@ describe(`context.CacheContext`, () => {
         },
       });
 
-      expect(userUpdater.mock.calls.length).to.eq(1);
+      jestExpect(userUpdater.mock.calls.length).toBe(1);
       const [, user, previous] = userUpdater.mock.calls[0];
-      expect(user).to.eq(undefined);
-      expect(previous).to.deep.eq(
+      jestExpect(user).toBe(undefined);
+      jestExpect(previous).toEqual(
         {
           __typename: 'User',
           id: 1,
@@ -201,7 +201,7 @@ describe(`context.CacheContext`, () => {
         },
       });
 
-      expect(cache.read(dashboardQuery).result).to.deep.eq({
+      jestExpect(cache.read(dashboardQuery).result).toEqual({
         dashboard: {
           name: 'Main Dashboard',
           id: 'dash0',
@@ -223,10 +223,10 @@ describe(`context.CacheContext`, () => {
 
     it(`triggers updates to the root node via the Query type`, () => {
       cache.write(fooQuery, { foo: 123 });
-      expect(rootUpdater.mock.calls.length).to.eq(1);
+      jestExpect(rootUpdater.mock.calls.length).toBe(1);
       const [, root, previous] = rootUpdater.mock.calls[0];
-      expect(root.foo).to.eq(123);
-      expect(previous.foo).to.eq(undefined);
+      jestExpect(root.foo).toBe(123);
+      jestExpect(previous.foo).toBe(undefined);
     });
 
   });

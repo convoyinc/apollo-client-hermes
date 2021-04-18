@@ -107,19 +107,19 @@ describe(`deserialization with migration`, () => {
         },
       },
     });
-    expect(newCache.getSnapshot()).to.deep.eq(expectedV2Cache.getSnapshot());
+    jestExpect(newCache.getSnapshot()).toEqual(expectedV2Cache.getSnapshot());
   });
 
   it(`throws if verifyQuery couldn't be satified due to missing migration map`, () => {
     const newCache = new Cache();
-    expect(() => {
+    jestExpect(() => {
       newCache.restore(JSON.parse(storedV1ExtractResult), undefined, v2Query);
-    }).to.throw();
+    }).toThrow();
   });
 
   it(`throws if verifyQuery couldn't be satified due to inadequate migration map`, () => {
     const newCache = new Cache();
-    expect(() => {
+    jestExpect(() => {
       newCache.restore(JSON.parse(storedV1ExtractResult), {
         _entities: {
           THREE: {
@@ -127,7 +127,7 @@ describe(`deserialization with migration`, () => {
           },
         },
       }, v2Query);
-    }).to.throw();
+    }).toThrow();
   });
 
 });

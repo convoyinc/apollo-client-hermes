@@ -28,16 +28,16 @@ describe(`transactions`, () => {
       transaction.write(simpleQuery, { foo: { bar: 1, baz: 'hi' } });
     });
 
-    expect(cache.getEntity(QueryRootId)).to.deep.eq({
+    jestExpect(cache.getEntity(QueryRootId)).toEqual({
       foo: { bar: 1, baz: 'hi' },
     });
-    expect(cache.getSnapshot().baseline).to.deep.eq(cache.getSnapshot().optimistic);
+    jestExpect(cache.getSnapshot().baseline).toEqual(cache.getSnapshot().optimistic);
   });
 
   it(`doesn't modify the cache until completion`, () => {
     cache.transaction((transaction) => {
       transaction.write(simpleQuery, { foo: { bar: 1, baz: 'hi' } });
-      expect(cache.getEntity(QueryRootId)).to.eq(undefined);
+      jestExpect(cache.getEntity(QueryRootId)).toBe(undefined);
     });
   });
 
@@ -47,7 +47,7 @@ describe(`transactions`, () => {
       throw new Error(`bewm`);
     });
 
-    expect(cache.getEntity(QueryRootId)).to.eq(undefined);
+    jestExpect(cache.getEntity(QueryRootId)).toBe(undefined);
   });
 
   it(`logs on error`, () => {
@@ -57,8 +57,8 @@ describe(`transactions`, () => {
       throw exception;
     });
 
-    expect(warn.mock.calls.length).to.eq(1);
-    expect(warn.mock.calls[0]).to.include(exception.toString());
+    jestExpect(warn.mock.calls.length).toBe(1);
+    jestExpect(warn.mock.calls[0]).toContain(exception.toString());
   });
 
   it(`read optimistic transaction`, () => {
@@ -69,7 +69,7 @@ describe(`transactions`, () => {
       }
     );
 
-    expect(cache.read(simpleQuery, /** optimistic */ true).result).to.deep.eq({
+    jestExpect(cache.read(simpleQuery, /** optimistic */ true).result).toEqual({
       foo: { bar: 1, baz: 'hello' },
     });
   });
@@ -95,13 +95,13 @@ describe(`transactions`, () => {
       }
     );
 
-    expect(cache.read(simpleQuery, /** optimistic */ true).result).to.deep.include({
-      foo: { bar: 1, baz: 'hello' },
-    });
+    jestExpect(cache.read(simpleQuery, /** optimistic */ true).result).toEqual(
+      jestExpect.objectContaining({ foo: { bar: 1, baz: 'hello' } })
+    );
 
-    expect(cache.read(otherQuery, /** optimistic */ true).result).to.deep.include({
-      fizz: { buzz: 'boom' },
-    });
+    jestExpect(cache.read(otherQuery, /** optimistic */ true).result).toEqual(
+      jestExpect.objectContaining({ fizz: { buzz: 'boom' } })
+    );
   });
 
   it(`rolls back optimistic transactions`, () => {
@@ -109,7 +109,7 @@ describe(`transactions`, () => {
       transaction.write(simpleQuery, { foo: { bar: 1, baz: 'hello' } });
     });
 
-    expect(cache.read(simpleQuery, /** optimistic */ true).result).to.deep.eq({
+    jestExpect(cache.read(simpleQuery, /** optimistic */ true).result).toEqual({
       foo: { bar: 1, baz: 'hello' },
     });
 
@@ -117,7 +117,7 @@ describe(`transactions`, () => {
       transaction.rollback('123');
     });
 
-    expect(cache.read(simpleQuery, /** optimistic */ true).result).to.eq(
+    jestExpect(cache.read(simpleQuery, /** optimistic */ true).result).toBe(
       undefined
     );
   });

@@ -50,14 +50,14 @@ describe(`serialization without optimistic update`, () => {
   it(`extract, stringify, and restore cache`, () => {
     const newCache = new Cache();
     newCache.restore(JSON.parse(storedExtractResult));
-    expect(newCache.getSnapshot()).to.deep.eq(originalCacheSnapshot);
+    jestExpect(newCache.getSnapshot()).toEqual(originalCacheSnapshot);
   });
 
   it(`extract and restore cache without JSON.stringify`, () => {
     const newCache = new Cache();
-    expect(() => {
+    jestExpect(() => {
       newCache.restore(extractResult);
-    }).to.throw(/Unexpected 'undefined'/);
+    }).toThrow(/Unexpected 'undefined'/);
   });
 
 });

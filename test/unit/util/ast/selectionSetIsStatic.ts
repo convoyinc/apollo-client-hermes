@@ -13,7 +13,7 @@ describe(`ast.selectionSetIsStatic`, () => {
   }
 
   it(`considers truly static fragments as static`, () => {
-    expect(selectionSetIsStatic(selection(`
+    jestExpect(selectionSetIsStatic(selection(`
       fragment foo on Foo {
         one
         two {
@@ -21,45 +21,45 @@ describe(`ast.selectionSetIsStatic`, () => {
           four
         }
       }
-    `))).to.eq(true);
+    `))).toBe(true);
   });
 
   it(`considers truly static operations as static`, () => {
-    expect(selectionSetIsStatic(selection(`{
+    jestExpect(selectionSetIsStatic(selection(`{
       one
       two {
         three
         four
       }
-    }`))).to.eq(true);
+    }`))).toBe(true);
   });
 
   it(`considers aliases as dynamic`, () => {
-    expect(selectionSetIsStatic(selection(`{
+    jestExpect(selectionSetIsStatic(selection(`{
       one: two
-    }`))).to.eq(false);
+    }`))).toBe(false);
   });
 
   it(`considers parameterized fields as dynamic`, () => {
-    expect(selectionSetIsStatic(selection(`{
+    jestExpect(selectionSetIsStatic(selection(`{
       one(foo: 123)
-    }`))).to.eq(false);
+    }`))).toBe(false);
   });
 
   it(`honors @static when on aliased fields`, () => {
-    expect(selectionSetIsStatic(selection(`{
+    jestExpect(selectionSetIsStatic(selection(`{
       one: two @static
-    }`))).to.eq(true);
+    }`))).toBe(true);
   });
 
   it(`honors @static when on parameterized fields`, () => {
-    expect(selectionSetIsStatic(selection(`{
+    jestExpect(selectionSetIsStatic(selection(`{
       one(foo: 123) @static
-    }`))).to.eq(true);
+    }`))).toBe(true);
   });
 
   it(`honors @static on nested fields`, () => {
-    expect(selectionSetIsStatic(selection(`{
+    jestExpect(selectionSetIsStatic(selection(`{
       one {
         two {
           three: foo @static
@@ -67,17 +67,17 @@ describe(`ast.selectionSetIsStatic`, () => {
           five: baz(fizz: 321) @static
         }
       }
-    }`))).to.eq(true);
+    }`))).toBe(true);
   });
 
   it(`walks inline fragments`, () => {
-    expect(selectionSetIsStatic(selection(`{
+    jestExpect(selectionSetIsStatic(selection(`{
       one {
         ... on Foo {
           three: foo
         }
       }
-    }`))).to.eq(false);
+    }`))).toBe(false);
   });
 
   describe(`selections with fragment spreads`, () => {
@@ -94,8 +94,8 @@ describe(`ast.selectionSetIsStatic`, () => {
         }`);
       });
 
-      expect(selectionSetIsStatic(mainSelection, fragmentGetter)).to.eq(false);
-      expect(fragmentGetter.mock.calls).to.deep.eq([
+      jestExpect(selectionSetIsStatic(mainSelection, fragmentGetter)).toBe(false);
+      jestExpect(fragmentGetter.mock.calls).toEqual([
         ['Foo'],
       ]);
     });
@@ -105,26 +105,26 @@ describe(`ast.selectionSetIsStatic`, () => {
         return undefined;
       }
 
-      expect(() => {
+      jestExpect(() => {
         selectionSetIsStatic(mainSelection, fragmentGetter);
-      }).to.throw(/fragment.*Foo/);
+      }).toThrow(/fragment.*Foo/);
     });
 
     it(`throws if you forget fragmentGetter`, () => {
-      expect(() => {
+      jestExpect(() => {
         selectionSetIsStatic(mainSelection);
-      }).to.throw(/fragmentGetter/);
+      }).toThrow(/fragmentGetter/);
     });
 
     it(`walks inline fragments that contain the spread`, () => {
       const fragmentGetter = jest.fn(() => selection(`{ one: foo }`));
-      expect(selectionSetIsStatic(selection(`{
+      jestExpect(selectionSetIsStatic(selection(`{
         one {
           ... on Foo {
             ...Foo
           }
         }
-      }`), fragmentGetter)).to.eq(false);
+      }`), fragmentGetter)).toBe(false);
     });
   });
 });
